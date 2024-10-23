@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Kontak</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Montserrat;
+            min-height: 100vh;
+            background-color: #D48BAA;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 60%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #a7097a;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background-color: #a7097a;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            color: #D48BAA;
+        }
+        
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        input.invalid, textarea.invalid {
+            border-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="contactForm" onsubmit="return validateForm(event)">
+            <div class="form-group">
+                <label for="nama">Nama:</label>
+                <input type="text" id="nama" name="nama">
+                <div class="error" id="namaError">Nama harus diisi</div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+                <div class="error" id="emailError">Email tidak valid</div>
+            </div>
+
+            <div class="form-group">
+                <label for="telepon">Nomor Telepon:</label>
+                <input type="tel" id="telepon" name="telepon">
+                <div class="error" id="teleponEmpty">Nomor telepon harus diisi</div>
+                <div class="error" id="teleponInvalid">Nomor telepon tidak valid</div>
+            </div>
+
+            <div class="form-group">
+                <label for="pesan">Pesan:</label>
+                <textarea id="pesan" name="pesan" rows="4"></textarea>
+                <div class="error" id="pesanError">Pesan harus diisi</div>
+            </div>
+
+            <button type="submit">Kirim Pesan</button>
+        </form>
+    </div>
+
+    <script>
+        function validateForm(event) {
+            event.preventDefault();
+            let isValid = true;
+            
+            document.querySelectorAll('.error').forEach(error => error.style.display = 'none');
+            document.querySelectorAll('input, textarea').forEach(input => input.classList.remove('invalid'));
+    
+            // validasi nama
+            const nama = document.getElementById('nama');
+            if (!nama.value.trim()) {
+                document.getElementById('namaError').style.display = 'block';
+                nama.classList.add('invalid');
+                isValid = false;
+            }
+    
+            // validasi email
+            const email = document.getElementById('email');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email.value.trim() || !emailRegex.test(email.value)) {
+                document.getElementById('emailError').style.display = 'block';
+                email.classList.add('invalid');
+                isValid = false;
+            }
+    
+            // validasi telepon
+            const telepon = document.getElementById('telepon');
+            const teleponRegex = /^\d+$/;
+            if (!telepon.value.trim()) {
+                document.getElementById('teleponEmpty').style.display = 'block';
+                telepon.classList.add('invalid');
+                isValid = false;
+            } else if (!teleponRegex.test(telepon.value)) {
+                document.getElementById('teleponInvalid').style.display = 'block';
+                telepon.classList.add('invalid');
+                isValid = false;
+            }
+    
+            // validasi pesan
+            const pesan = document.getElementById('pesan');
+            if (!pesan.value.trim()) {
+                document.getElementById('pesanError').style.display = 'block';
+                pesan.classList.add('invalid');
+                isValid = false;
+            }
+    
+            if (isValid) {
+                event.target.submit();
+            }
+        }
+    
+        document.querySelector('form').addEventListener('submit', validateForm);
+    </script>
+</body>
+</html>
